@@ -69,14 +69,14 @@ export default function Members() {
     ].sort((a, b) => new Date(b.date) - new Date(a.date))
 
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
+      <div className="space-y-section-margin">
+        <div className="flex items-center justify-between animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <div>
-            <button type="button" onClick={() => setSelectedId(null)} className="text-sm text-blue-500 hover:underline mb-2">
+            <button type="button" onClick={() => setSelectedId(null)} className="text-sm text-primary hover:underline mb-2 transition-all">
               ← Back to members
             </button>
-            <h1 className="text-2xl font-bold">{selected.name}</h1>
-            <p className="text-sm text-slate-500">{selected.department} · {selected.email}</p>
+            <h1 className="text-headline-md font-headline-md text-on-surface">{selected.name}</h1>
+            <p className="text-body-md text-on-surface-variant/70">{selected.department} · {selected.email}</p>
           </div>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => setModal({ type: 'contribution', memberId: selected.id })}>
@@ -88,35 +88,37 @@ export default function Members() {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Card><CardContent className="pt-6"><p className="text-sm text-slate-500">Contributed</p><p className="text-xl font-amount font-semibold text-green-600">{formatAmount(contributed, symbol)}</p></CardContent></Card>
-          <Card><CardContent className="pt-6"><p className="text-sm text-slate-500">Owed</p><p className="text-xl font-amount font-semibold text-amber-600">{formatAmount(owed, symbol)}</p></CardContent></Card>
-          <Card><CardContent className="pt-6"><p className="text-sm text-slate-500">Net</p><p className={`text-xl font-amount font-semibold ${net >= 0 ? 'text-green-600' : 'text-red-600'}`}>{formatAmount(net, symbol)}</p></CardContent></Card>
+        <div className="grid gap-card-gap sm:grid-cols-3">
+          <Card style={{ animationDelay: '0.2s' }}><CardContent className="pt-6"><p className="text-label-caps font-label-caps text-on-surface-variant/70">Contributed</p><p className="text-xl font-amount font-semibold text-primary-container mt-2">{formatAmount(contributed, symbol)}</p></CardContent></Card>
+          <Card style={{ animationDelay: '0.3s' }}><CardContent className="pt-6"><p className="text-label-caps font-label-caps text-on-surface-variant/70">Owed</p><p className="text-xl font-amount font-semibold text-error mt-2">{formatAmount(owed, symbol)}</p></CardContent></Card>
+          <Card style={{ animationDelay: '0.4s' }}><CardContent className="pt-6"><p className="text-label-caps font-label-caps text-on-surface-variant/70">Net</p><p className={`text-xl font-amount font-semibold mt-2 ${net >= 0 ? 'text-primary-container' : 'text-error'}`}>{formatAmount(net, symbol)}</p></CardContent></Card>
         </div>
 
-        <Card>
+        <Card style={{ animationDelay: '0.5s' }}>
           <CardHeader><CardTitle>Transaction history</CardTitle></CardHeader>
-          <CardContent>
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-slate-500">
-                  <th className="pb-2">Date</th>
-                  <th className="pb-2">Description</th>
-                  <th className="pb-2 text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {history.map((h, i) => (
-                  <tr key={i} className="border-b border-slate-50">
-                    <td className="py-2">{formatDate(h.date)}</td>
-                    <td>{h.desc}</td>
-                    <td className={`py-2 text-right font-amount ${h.positive ? 'text-green-600' : 'text-red-600'}`}>
-                      {h.positive ? '+' : '-'}{formatAmount(h.amount, symbol)}
-                    </td>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-surface-container-low">
+                  <tr className="border-b border-outline-variant/10 text-left text-on-surface-variant/70 text-xs font-label-caps uppercase">
+                    <th className="p-gutter">Date</th>
+                    <th className="p-gutter">Description</th>
+                    <th className="p-gutter text-right">Amount</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-outline-variant/5">
+                  {history.map((h, i) => (
+                    <tr key={i} className="hover:bg-white/[0.02] transition-colors group">
+                      <td className="p-gutter text-on-surface-variant">{formatDate(h.date)}</td>
+                      <td className="p-gutter text-on-surface">{h.desc}</td>
+                      <td className={`p-gutter text-right font-amount ${h.positive ? 'text-primary-container' : 'text-error'}`}>
+                        {h.positive ? '+' : '-'}{formatAmount(h.amount, symbol)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </CardContent>
         </Card>
 
@@ -126,13 +128,13 @@ export default function Members() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-section-margin">
+      <div className="flex items-center justify-between animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Members</h1>
-          <p className="text-sm text-slate-500">{state.members.length} team members</p>
+          <h1 className="text-headline-md font-headline-md text-on-surface">Members</h1>
+          <p className="text-body-md text-on-surface-variant/70">{state.members.length} team members</p>
         </div>
-        <Button onClick={() => setModal({ type: 'add' })}>
+        <Button onClick={() => setModal({ type: 'add' })} variant="primary">
           <Plus className="h-4 w-4" /> Add member
         </Button>
       </div>
@@ -140,43 +142,43 @@ export default function Members() {
       {state.members.length === 0 ? (
         <EmptyState icon={Users} title="No members yet" description="Add team members to start tracking contributions." actionLabel="Add member" onAction={() => setModal({ type: 'add' })} />
       ) : (
-        <Card>
+        <Card style={{ animationDelay: '0.2s' }}>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50 text-left text-slate-600">
-                  <th className="px-4 py-3 font-medium">Name</th>
-                  <th className="px-4 py-3 font-medium">Role / Dept</th>
-                  <th className="px-4 py-3 font-medium text-right">Contributed</th>
-                  <th className="px-4 py-3 font-medium text-right">Pending receivable</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 font-medium text-right">Actions</th>
+            <table className="w-full text-left">
+              <thead className="bg-surface-container-low">
+                <tr className="border-b border-outline-variant/10 text-on-surface-variant/70 text-xs font-label-caps uppercase">
+                  <th className="p-gutter font-medium">Name</th>
+                  <th className="p-gutter font-medium">Role / Dept</th>
+                  <th className="p-gutter font-medium text-right">Contributed</th>
+                  <th className="p-gutter font-medium text-right">Pending receivable</th>
+                  <th className="p-gutter font-medium">Status</th>
+                  <th className="p-gutter font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-outline-variant/5">
                 {state.members.map((m) => (
-                  <tr key={m.id} className="border-b border-slate-100 hover:bg-slate-50">
-                    <td className="px-4 py-3">
-                      <button type="button" className="font-medium text-blue-600 hover:underline" onClick={() => setSelectedId(m.id)}>
+                  <tr key={m.id} className="hover:bg-white/[0.02] transition-colors group">
+                    <td className="p-gutter">
+                      <button type="button" className="font-medium text-primary hover:underline" onClick={() => setSelectedId(m.id)}>
                         {m.name}
                       </button>
                     </td>
-                    <td className="px-4 py-3 text-slate-600">{m.department || '—'}</td>
-                    <td className="px-4 py-3 text-right font-amount">{formatAmount(getMemberContributed(m.id, state.contributions), symbol)}</td>
-                    <td className="px-4 py-3 text-right font-amount text-amber-600">{formatAmount(getMemberPendingReceivable(m.id, state.receivables), symbol)}</td>
-                    <td className="px-4 py-3">
+                    <td className="p-gutter text-on-surface-variant">{m.department || '—'}</td>
+                    <td className="p-gutter text-right font-amount text-on-surface">{formatAmount(getMemberContributed(m.id, state.contributions), symbol)}</td>
+                    <td className="p-gutter text-right font-amount text-error">{formatAmount(getMemberPendingReceivable(m.id, state.receivables), symbol)}</td>
+                    <td className="p-gutter">
                       <Badge variant={m.status === 'active' ? 'success' : 'outline'}>{m.status}</Badge>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="p-gutter">
                       <div className="flex justify-end gap-1">
-                        <button type="button" className="p-1.5 rounded hover:bg-slate-100" title="Edit" onClick={() => setModal({ type: 'edit', ...m })}>
-                          <Pencil className="h-4 w-4 text-slate-500" />
+                        <button type="button" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" title="Edit" onClick={() => setModal({ type: 'edit', ...m })}>
+                          <Pencil className="h-4 w-4" />
                         </button>
-                        <button type="button" className="p-1.5 rounded hover:bg-slate-100" title="View ledger" onClick={() => setSelectedId(m.id)}>
-                          <BookOpen className="h-4 w-4 text-slate-500" />
+                        <button type="button" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" title="View ledger" onClick={() => setSelectedId(m.id)}>
+                          <BookOpen className="h-4 w-4" />
                         </button>
-                        <button type="button" className="p-1.5 rounded hover:bg-red-50" title="Delete" onClick={() => setDeleteId(m.id)}>
-                          <Trash2 className="h-4 w-4 text-red-500" />
+                        <button type="button" className="p-1.5 rounded hover:bg-error-container/20 text-on-surface-variant hover:text-error transition-colors" title="Delete" onClick={() => setDeleteId(m.id)}>
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     </td>

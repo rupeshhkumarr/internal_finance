@@ -11,22 +11,27 @@ export function Layout() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f8fafc] pl-64">
+      <div className="min-h-screen bg-background pl-[280px]">
+        <div className="ambient-glow-1"></div>
+        <div className="ambient-glow-2"></div>
         <PageSkeleton />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen bg-background">
+      <div className="ambient-glow-1"></div>
+      <div className="ambient-glow-2"></div>
+      
       <Sidebar />
-      <div className="pl-64">
+      <div className="pl-[280px] flex flex-col min-h-screen">
         <Header />
         <ReadOnlyBanner />
-        <main className="p-6">
+        <main className="flex-1 p-gutter space-y-card-gap">
           <Outlet />
         </main>
-        <footer className="no-print border-t border-slate-200 px-6 py-3 text-xs text-slate-500">
+        <footer className="no-print border-t border-outline-variant/10 px-gutter py-4 text-xs text-on-surface-variant/50">
           Last saved: {state.lastSaved ? formatDateTime(state.lastSaved) : '—'} ·{' '}
           {isCloud ? 'Shared cloud data (all users see the same pool)' : 'Stored locally in this browser only'}
         </footer>

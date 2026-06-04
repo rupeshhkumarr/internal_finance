@@ -5,7 +5,7 @@ import { useToast } from '../context/ToastContext'
 import { Button } from '../components/ui/Button'
 import { Modal, ConfirmDialog } from '../components/ui/Modal'
 import { Badge } from '../components/ui/Badge'
-import { Card } from '../components/ui/Card'
+import { Card, CardContent } from '../components/ui/Card'
 import { EmptyState } from '../components/ui/EmptyState'
 import { ReceivableForm } from '../components/forms/ReceivableForm'
 import { ContributionForm } from '../components/forms/ContributionForm'
@@ -43,52 +43,58 @@ export default function Receivables() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
+    <div className="space-y-section-margin">
+      <div className="flex justify-between items-start animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <div>
-          <h1 className="text-2xl font-bold">Receivables</h1>
-          <p className="text-sm text-slate-500">Amounts owed to the pool</p>
+          <h1 className="text-headline-md font-headline-md text-on-surface">Receivables</h1>
+          <p className="text-body-md text-on-surface-variant/70">Amounts owed to the pool</p>
         </div>
-        <Button onClick={() => setModal({ type: 'add' })}>
+        <Button onClick={() => setModal({ type: 'add' })} variant="primary">
           <Plus className="h-4 w-4" /> Add receivable
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="p-4 bg-amber-50 border-amber-200">
-          <p className="text-sm text-amber-800">Total outstanding</p>
-          <p className="text-2xl font-amount font-bold text-amber-900">{formatAmount(stats.totalReceivables, symbol)}</p>
+      <div className="grid gap-card-gap sm:grid-cols-3">
+        <Card style={{ animationDelay: '0.2s' }}>
+          <CardContent className="pt-6">
+            <p className="text-label-caps font-label-caps text-error">Total outstanding</p>
+            <p className="mt-2 text-2xl font-amount font-bold text-error">{formatAmount(stats.totalReceivables, symbol)}</p>
+          </CardContent>
         </Card>
-        <Card className="p-4">
-          <p className="text-sm text-slate-500">Overdue items</p>
-          <p className="text-2xl font-bold text-red-600">{overdue.length}</p>
+        <Card style={{ animationDelay: '0.3s' }}>
+          <CardContent className="pt-6">
+            <p className="text-label-caps font-label-caps text-on-surface-variant/70">Overdue items</p>
+            <p className="mt-2 text-2xl font-bold text-error">{overdue.length}</p>
+          </CardContent>
         </Card>
-        <Card className="p-4">
-          <p className="text-sm text-slate-500">Oldest overdue</p>
-          <p className="text-sm font-medium mt-1">
-            {oldest ? `${memberMap[oldest.memberId]} — ${daysOverdue(oldest.dueDate)} days` : 'None'}
-          </p>
+        <Card style={{ animationDelay: '0.4s' }}>
+          <CardContent className="pt-6">
+            <p className="text-label-caps font-label-caps text-on-surface-variant/70">Oldest overdue</p>
+            <p className="mt-2 text-sm font-medium text-on-surface">
+              {oldest ? `${memberMap[oldest.memberId]} — ${daysOverdue(oldest.dueDate)} days` : 'None'}
+            </p>
+          </CardContent>
         </Card>
       </div>
 
       {state.receivables.length === 0 ? (
         <EmptyState title="No receivables" description="Track what members owe the pool." actionLabel="Add receivable" onAction={() => setModal({ type: 'add' })} />
       ) : (
-        <Card>
+        <Card style={{ animationDelay: '0.5s' }}>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-slate-50 text-left text-slate-600">
-                  <th className="px-4 py-3">Member</th>
-                  <th className="px-4 py-3 text-right">Amount due</th>
-                  <th className="px-4 py-3">Due date</th>
-                  <th className="px-4 py-3">Overdue</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Notes</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+            <table className="w-full text-left">
+              <thead className="bg-surface-container-low">
+                <tr className="border-b border-outline-variant/10 text-on-surface-variant/70 text-xs font-label-caps uppercase">
+                  <th className="p-gutter font-medium">Member</th>
+                  <th className="p-gutter font-medium text-right">Amount due</th>
+                  <th className="p-gutter font-medium">Due date</th>
+                  <th className="p-gutter font-medium">Overdue</th>
+                  <th className="p-gutter font-medium">Status</th>
+                  <th className="p-gutter font-medium">Notes</th>
+                  <th className="p-gutter font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-outline-variant/5">
                 {state.receivables.map((r) => {
                   const overdueDays = daysOverdue(r.dueDate)
                   const isOverdue =
@@ -98,44 +104,44 @@ export default function Receivables() {
                     <tr
                       key={r.id}
                       className={cn(
-                        'border-b',
-                        isOverdue && 'bg-amber-50/80'
+                        'hover:bg-white/[0.02] transition-colors group',
+                        isOverdue && 'bg-error-container/5 hover:bg-error-container/10'
                       )}
                     >
-                      <td className="px-4 py-3 font-medium">{memberMap[r.memberId]}</td>
-                      <td className="px-4 py-3 text-right font-amount">{formatAmount(remaining, symbol)}</td>
-                      <td className="px-4 py-3">{formatDate(r.dueDate)}</td>
-                      <td className="px-4 py-3">
+                      <td className="p-gutter font-medium text-on-surface">{memberMap[r.memberId]}</td>
+                      <td className="p-gutter text-right font-amount text-primary-container">{formatAmount(remaining, symbol)}</td>
+                      <td className="p-gutter text-on-surface-variant">{formatDate(r.dueDate)}</td>
+                      <td className="p-gutter">
                         {isOverdue ? (
                           <Badge variant="danger">{overdueDays} days overdue</Badge>
                         ) : (
-                          '—'
+                          <span className="text-on-surface-variant/50">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3">
+                      <td className="p-gutter">
                         <Badge variant={statusVariant[r.status]}>{r.status.replace('_', ' ')}</Badge>
                       </td>
-                      <td className="px-4 py-3 text-slate-500 max-w-[160px] truncate">{r.description}</td>
-                      <td className="px-4 py-3">
+                      <td className="p-gutter text-on-surface-variant/70 max-w-[160px] truncate">{r.description}</td>
+                      <td className="p-gutter">
                         <div className="flex justify-end gap-1 flex-wrap">
                           {r.status !== 'paid' && r.status !== 'waived' && (
                             <>
-                              <button type="button" title="Mark paid" className="p-1.5 hover:bg-green-50 rounded" onClick={() => setPayReceivable(r)}>
-                                <CheckCircle className="h-4 w-4 text-green-600" />
+                              <button type="button" title="Mark paid" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" onClick={() => setPayReceivable(r)}>
+                                <CheckCircle className="h-4 w-4" />
                               </button>
-                              <button type="button" title="Reminder" className="p-1.5 hover:bg-slate-100 rounded" onClick={() => copyReminder(r)}>
+                              <button type="button" title="Reminder" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" onClick={() => copyReminder(r)}>
                                 <Bell className="h-4 w-4" />
                               </button>
-                              <button type="button" title="Waive" className="p-1.5 hover:bg-slate-100 rounded" onClick={() => setWaiveId(r.id)}>
+                              <button type="button" title="Waive" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" onClick={() => setWaiveId(r.id)}>
                                 <Ban className="h-4 w-4" />
                               </button>
                             </>
                           )}
-                          <button type="button" className="p-1.5 hover:bg-slate-100 rounded" onClick={() => setModal({ type: 'edit', ...r })}>
+                          <button type="button" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" onClick={() => setModal({ type: 'edit', ...r })}>
                             <Pencil className="h-4 w-4" />
                           </button>
-                          <button type="button" className="p-1.5 hover:bg-red-50 rounded" onClick={() => setDeleteId(r.id)}>
-                            <Trash2 className="h-4 w-4 text-red-500" />
+                          <button type="button" className="p-1.5 rounded hover:bg-error-container/20 text-on-surface-variant hover:text-error transition-colors" onClick={() => setDeleteId(r.id)}>
+                            <Trash2 className="h-4 w-4" />
                           </button>
                         </div>
                       </td>
@@ -193,7 +199,7 @@ export default function Receivables() {
       </Modal>
       <Modal open={!!waiveId} onClose={() => setWaiveId(null)} title="Waive receivable" size="sm">
         <textarea
-          className="w-full rounded-lg border px-3 py-2 text-sm mb-4"
+          className="w-full bg-surface-container-low border border-outline-variant/20 rounded-xl px-4 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/30 transition-all mb-4"
           placeholder="Reason for waiving..."
           value={waiveReason}
           onChange={(e) => setWaiveReason(e.target.value)}

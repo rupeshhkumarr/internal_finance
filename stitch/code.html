@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Budget Pool Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;family=Geist:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                "colors": {
+                        "tertiary-container": "#d6dae4",
+                        "tertiary": "#f3f6ff",
+                        "surface-variant": "#393528",
+                        "on-tertiary": "#2c3138",
+                        "surface-container": "#231f14",
+                        "on-surface-variant": "#d0c6ab",
+                        "on-tertiary-container": "#5a5f68",
+                        "surface-tint": "#e9c400",
+                        "primary": "#fff6df",
+                        "on-secondary": "#2f3035",
+                        "inverse-primary": "#705d00",
+                        "tertiary-fixed": "#dee2ec",
+                        "tertiary-fixed-dim": "#c2c7d0",
+                        "on-secondary-fixed": "#1a1c20",
+                        "on-secondary-container": "#b7b8be",
+                        "surface-container-highest": "#393528",
+                        "surface-container-lowest": "#110e05",
+                        "inverse-surface": "#eae2cf",
+                        "outline-variant": "#4d4732",
+                        "on-tertiary-fixed-variant": "#42474f",
+                        "error-container": "#93000a",
+                        "on-background": "#eae2cf",
+                        "secondary-container": "#47494e",
+                        "outline": "#999077",
+                        "primary-fixed-dim": "#e9c400",
+                        "primary-fixed": "#ffe16d",
+                        "on-surface": "#eae2cf",
+                        "background": "#161308",
+                        "surface-container-low": "#1f1b10",
+                        "primary-container": "#ffd700",
+                        "secondary": "#c6c6cc",
+                        "on-primary-fixed-variant": "#544600",
+                        "surface-bright": "#3d392c",
+                        "secondary-fixed-dim": "#c6c6cc",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-high": "#2e2a1e",
+                        "on-error": "#690005",
+                        "secondary-fixed": "#e2e2e8",
+                        "on-primary": "#3a3000",
+                        "on-tertiary-fixed": "#171c23",
+                        "on-primary-container": "#705e00",
+                        "surface": "#161308",
+                        "error": "#ffb4ab",
+                        "inverse-on-surface": "#343024",
+                        "surface-dim": "#161308",
+                        "on-secondary-fixed-variant": "#45474b",
+                        "on-primary-fixed": "#221b00"
+                },
+                "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                },
+                "spacing": {
+                        "section-margin": "48px",
+                        "card-gap": "16px",
+                        "gutter": "24px",
+                        "container-padding": "32px",
+                        "sidebar-width": "280px"
+                },
+                "fontFamily": {
+                        "headline-sm": ["Geist"],
+                        "body-lg": ["Inter"],
+                        "label-caps": ["JetBrains Mono"],
+                        "data-lg": ["Geist"],
+                        "headline-md-mobile": ["Geist"],
+                        "display-lg": ["Geist"],
+                        "headline-md": ["Geist"],
+                        "body-md": ["Inter"]
+                },
+                "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "data-lg": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                        "headline-md": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}]
+                }
+              },
+            },
+          }
+        </script>
+<style>
+        body {
+            background-color: #000000;
+            color: #eae2cf;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(35, 31, 20, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .sidebar-active {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0) 100%);
+            border-left: 4px solid #ffd700;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Premium Animations */
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            50% { transform: scale(1.02); box-shadow: 0 0 20px 0 rgba(255, 215, 0, 0.2); }
+        }
+
+        .pulse-btn {
+            animation: pulse-soft 2s infinite ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .shimmer-effect::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 215, 0, 0) 0%,
+                rgba(255, 215, 0, 0.05) 50%,
+                rgba(255, 215, 0, 0) 100%
+            );
+            animation: shimmer 3s infinite;
+        }
+
+        .aurora-glow {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient Glows */
+        .ambient-glow-1 {
+            position: fixed;
+            top: -10%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.07) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .ambient-glow-2 {
+            position: fixed;
+            bottom: -10%;
+            left: 0%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(71, 73, 78, 0.1) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #110e05;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #393528;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffd700;
+        }
+
+        /* Chart Styles */
+        .chart-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 3s ease-in-out forwards;
+        }
+        @keyframes dash {
+            to { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body class="bg-background">
+<div class="ambient-glow-1"></div>
+<div class="ambient-glow-2"></div>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 bottom-0 w-[280px] bg-[#0A0C10] border-r border-outline-variant/10 flex flex-col z-50">
+<div class="p-gutter flex items-center gap-4 animate-fade-in-up" style="animation-delay: 0.1s">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm text-primary font-bold">Budget Pool</h1>
+<p class="text-label-caps font-label-caps text-on-surface-variant opacity-70">Internal Team Budget</p>
+</div>
+</div>
+<nav class="flex-1 mt-8 space-y-1">
+<a class="sidebar-active flex items-center gap-3 px-6 py-4 text-primary transition-all duration-300 animate-fade-in-up" href="#" style="animation-delay: 0.2s">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-4 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all duration-300 group animate-fade-in-up" href="#" style="animation-delay: 0.25s">
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:scale-110">group</span>
+<span>Members</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-4 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all duration-300 group animate-fade-in-up" href="#" style="animation-delay: 0.3s">
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:scale-110">account_balance_wallet</span>
+<span>Contributions</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-4 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all duration-300 group animate-fade-in-up" href="#" style="animation-delay: 0.35s">
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:scale-110">trending_up</span>
+<span>Receivables</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-4 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all duration-300 group animate-fade-in-up" href="#" style="animation-delay: 0.4s">
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:scale-110">trending_down</span>
+<span>Payables</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-4 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all duration-300 group animate-fade-in-up" href="#" style="animation-delay: 0.45s">
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:scale-110">book</span>
+<span>Ledger</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-4 text-on-surface-variant hover:text-primary hover:bg-white/5 transition-all duration-300 group animate-fade-in-up" href="#" style="animation-delay: 0.5s">
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:scale-110">analytics</span>
+<span>Reports &amp; Summary</span>
+</a>
+</nav>
+<div class="p-6 border-t border-outline-variant/10 animate-fade-in-up" style="animation-delay: 0.6s">
+<a class="flex items-center gap-3 text-on-surface-variant hover:text-primary transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[280px] min-h-screen">
+<!-- Top Navbar -->
+<header class="sticky top-0 z-40 bg-background/80 backdrop-blur-xl h-16 flex items-center justify-between px-gutter border-b border-outline-variant/5">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-xl">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant/20 rounded-xl py-2 pl-10 pr-4 text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/30 transition-all" placeholder="Search members, transactions, notes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-gutter">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-bright/50 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant border border-outline-variant/10 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq_xewi1-j9iddsq0-E7j8FlJFfVpJ4SbuPWGov_IlWhH-pueMN9SSwdLBGZOruOqXE2NmgkJ0InRtnu3NCl83ONNk2LjKvl0s1DnNibY0CQ7XPfO6RczTIandMQtDv5vjXBUL6-3WBs2hXnT1ukeT7iBRcgEPjJhTTSQ5ac5B_53IsFsBYzXc65NvonaU_8RUbQAGXZYhiGeKyi5LHvK9_kSm3J7upCgHV2speCXfL12CBPwtlE518CktBhLo4FT6_EGSWFQbhQ7I"/>
+</button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-gutter space-y-card-gap">
+<!-- Hero Header -->
+<div class="mb-8 animate-fade-in-up" style="animation-delay: 0.1s">
+<h2 class="text-headline-md font-headline-md text-on-surface">Dashboard</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Pool overview and recent activity</p>
+</div>
+<!-- Row 1: Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-card-gap">
+<!-- Total Pool Balance -->
+<div class="glass-card shimmer-effect p-6 rounded-xl flex flex-col justify-between h-[140px] group animate-fade-in-up" style="animation-delay: 0.2s">
+<div class="aurora-glow"></div>
+<div class="flex justify-between items-start relative z-10">
+<span class="text-label-caps font-label-caps text-on-surface-variant/70">Total Pool Balance</span>
+<span class="material-symbols-outlined text-primary-container group-hover:scale-110 transition-transform">account_balance_wallet</span>
+</div>
+<div class="flex items-center gap-1 relative z-10">
+<span class="text-primary-container font-headline-sm text-2xl">₹</span>
+<span class="text-on-surface font-headline-md glow-text">0</span>
+</div>
+</div>
+<!-- Total Collected -->
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between h-[140px] group animate-fade-in-up" style="animation-delay: 0.3s">
+<div class="aurora-glow"></div>
+<div class="flex justify-between items-start relative z-10">
+<span class="text-label-caps font-label-caps text-on-surface-variant/70">Total Collected</span>
+<span class="material-symbols-outlined text-primary-container/60 group-hover:text-primary-container transition-all group-hover:scale-110">trending_up</span>
+</div>
+<div class="flex items-center gap-1 relative z-10">
+<span class="text-primary-container font-headline-sm text-2xl">₹</span>
+<span class="text-on-surface font-headline-md glow-text">0</span>
+</div>
+</div>
+<!-- Total Receivables -->
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between h-[140px] group animate-fade-in-up" style="animation-delay: 0.4s">
+<div class="aurora-glow"></div>
+<div class="flex justify-between items-start relative z-10">
+<span class="text-label-caps font-label-caps text-on-surface-variant/70">Total Receivables</span>
+<span class="material-symbols-outlined text-primary-container/60 group-hover:text-primary-container transition-all group-hover:scale-110">info</span>
+</div>
+<div class="flex items-center gap-1 relative z-10">
+<span class="text-primary-container font-headline-sm text-2xl">₹</span>
+<span class="text-on-surface font-headline-md glow-text">0</span>
+</div>
+</div>
+<!-- Total Payables -->
+<div class="glass-card p-6 rounded-xl flex flex-col justify-between h-[140px] group animate-fade-in-up" style="animation-delay: 0.5s">
+<div class="aurora-glow"></div>
+<div class="flex justify-between items-start relative z-10">
+<span class="text-label-caps font-label-caps text-on-surface-variant/70">Total Payables</span>
+<span class="material-symbols-outlined text-primary-container/60 group-hover:text-primary-container transition-all group-hover:scale-110">payment</span>
+</div>
+<div class="flex items-center gap-1 relative z-10">
+<span class="text-primary-container font-headline-sm text-2xl">₹</span>
+<span class="text-on-surface font-headline-md glow-text">0</span>
+</div>
+</div>
+</div>
+<!-- Row 2: Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-card-gap">
+<!-- Contribution Share -->
+<div class="glass-card p-gutter rounded-xl min-h-[400px] flex flex-col animate-fade-in-up" style="animation-delay: 0.6s">
+<div class="flex justify-between items-center mb-6 relative z-10">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Contribution share</h3>
+<span class="material-symbols-outlined text-on-surface-variant/50">pie_chart</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center text-center relative z-10">
+<div class="w-48 h-48 rounded-full border-4 border-dashed border-outline-variant/20 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-outline-variant text-5xl">incomplete_circle</span>
+</div>
+<p class="text-on-surface-variant font-body-md italic opacity-60">No contributions yet</p>
+</div>
+</div>
+<!-- Monthly in vs out -->
+<div class="glass-card p-gutter rounded-xl min-h-[400px] flex flex-col animate-fade-in-up" style="animation-delay: 0.7s">
+<div class="flex justify-between items-center mb-6 relative z-10">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Monthly in vs out (6 months)</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-[#FFD700]"></span>
+<span class="text-xs text-on-surface-variant">Contributions</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="text-xs text-on-surface-variant">Payables</span>
+</div>
+</div>
+</div>
+<div class="flex-1 relative z-10">
+<!-- Refined Visualization Area -->
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 400 150">
+<!-- Area Fill Gradient -->
+<defs>
+<lineargradient id="areaGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#FFD700" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#FFD700" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Simulated Grid -->
+<g class="text-outline-variant/10" stroke="currentColor" stroke-width="0.5">
+<line x1="0" x2="400" y1="0" y2="0"></line>
+<line x1="0" x2="400" y1="37.5" y2="37.5"></line>
+<line x1="0" x2="400" y1="75" y2="75"></line>
+<line x1="0" x2="400" y1="112.5" y2="112.5"></line>
+<line x1="0" x2="400" y1="150" y2="150"></line>
+</g>
+<!-- Empty Data Message -->
+<foreignobject height="100%" width="100%" x="0" y="0">
+<div class="w-full h-full flex items-center justify-center">
+<div class="text-center">
+<span class="material-symbols-outlined text-outline-variant text-4xl mb-2">monitoring</span>
+<p class="text-on-surface-variant text-sm opacity-50">Awaiting data flows...</p>
+</div>
+</div>
+</foreignobject>
+</svg>
+<div class="absolute bottom-0 left-0 right-0 flex justify-around pt-2 translate-y-full">
+<span class="text-[10px] text-on-surface-variant/50">Jan 26</span>
+<span class="text-[10px] text-on-surface-variant/50">Feb 26</span>
+<span class="text-[10px] text-on-surface-variant/50">Mar 26</span>
+<span class="text-[10px] text-on-surface-variant/50">Apr 26</span>
+<span class="text-[10px] text-on-surface-variant/50">May 26</span>
+<span class="text-[10px] text-on-surface-variant/50">Jun 26</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Table -->
+<div class="glass-card rounded-xl overflow-hidden mb-section-margin animate-fade-in-up" style="animation-delay: 0.8s">
+<div class="p-gutter border-b border-outline-variant/10 flex justify-between items-center relative z-10">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Member contribution targets</h3>
+<button class="pulse-btn flex items-center gap-2 px-4 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-caps text-xs hover:brightness-110 transition-all shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined text-sm">add</span>
+                    New Target
+                </button>
+</div>
+<div class="overflow-x-auto relative z-10">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="p-gutter text-label-caps font-label-caps text-on-surface-variant/70 border-b border-outline-variant/10">Member Name</th>
+<th class="p-gutter text-label-caps font-label-caps text-on-surface-variant/70 border-b border-outline-variant/10">Target Amount</th>
+<th class="p-gutter text-label-caps font-label-caps text-on-surface-variant/70 border-b border-outline-variant/10">Collected</th>
+<th class="p-gutter text-label-caps font-label-caps text-on-surface-variant/70 border-b border-outline-variant/10">Status</th>
+<th class="p-gutter text-label-caps font-label-caps text-on-surface-variant/70 border-b border-outline-variant/10 text-right">Progress</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="p-gutter flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
+<img alt="John Doe" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbxd10iHxKLqL1JHT03iekLJif6c1NyxR-_Te2djRVd8IxDIP09ZO1enq43M75-6k2ZhQleqYF2s5aVUvzn1Y2IhemE7Fh7Ish5aQA1NcxVrpSsCr7X9L0RUIOzL1ogK-QUbNwfXctzTedtm9tPu-NMDToJQmfeeyhjw4t6LnMkfMAiQOpQRoyywibJvrA3RXaa8pnFFQoBqgMkH_guKH1Mid37Aec5YQVRwvctp-mBRn7Ioj_glW8Vac4gUqz85Xrnr-5fKTvefmZ"/>
+</div>
+<span class="text-on-surface font-medium">John Doe</span>
+</td>
+<td class="p-gutter text-on-surface-variant font-data-lg text-sm">₹ 5,000</td>
+<td class="p-gutter text-on-surface-variant font-data-lg text-sm">₹ 2,500</td>
+<td class="p-gutter">
+<span class="px-2 py-1 bg-surface-variant/30 text-surface-tint border border-surface-variant text-[10px] uppercase font-bold rounded-full">In Progress</span>
+</td>
+<td class="p-gutter">
+<div class="flex items-center justify-end gap-3">
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 50%;"></div>
+</div>
+<span class="text-xs text-on-surface-variant">50%</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="p-gutter flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
+<img alt="Alice Smith" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjQLsyNVWwSPgTDTTr8vorhHo6YRE2kg-IEP_88I8XdzhE81uMxJWbQyCiacjF9b78CXnQh24TfLA2f3r_ZNrFA0UaW7CaNMBhyY1gChz-lG_f0lON_eB19bjutU0jl9n3_dhhiHquEEBQ-3kNXmiGtE9N88TnLgrwqrobpwcBJ-Sjnyqr27Ri8iW7CnifG4lDtPKGvj9xx-g6mlG2HL8uLi1jHdG9USQUJfqWnQ-AZwGZ7DIXKq_8qZbsNJD64HSpk2FTHC8zkGD0"/>
+</div>
+<span class="text-on-surface font-medium">Alice Smith</span>
+</td>
+<td class="p-gutter text-on-surface-variant font-data-lg text-sm">₹ 5,000</td>
+<td class="p-gutter text-on-surface-variant font-data-lg text-sm">₹ 5,000</td>
+<td class="p-gutter">
+<span class="px-2 py-1 bg-primary/10 text-primary border border-primary/20 text-[10px] uppercase font-bold rounded-full">Completed</span>
+</td>
+<td class="p-gutter">
+<div class="flex items-center justify-end gap-3">
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 100%;"></div>
+</div>
+<span class="text-xs text-on-surface-variant">100%</span>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="p-gutter flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/20 flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
+<img alt="Robert White" class="w-full h-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq9W1x6kssJL4BrXs1ebzI2DMU2xCPRYiITK2MOOol09CCRLPDeZdosR9dr9FL4YUIR4idXwCKvLvdSUkVew4kn4FLERP-hQvqWyr5qZRgPFHm6nsgk7sScPLGPy6q8TbOgOu8_TtKj--2IaIPve2Awy89tV-PTakRO_WTcdLkJ4bha1HsHz5JzkKL2vFjJz7zpE7XbX19jA47d6d7f5-0X0jH1wuWcRaEfhona8tdFHl3mQo-okBVBzGFWdYIti3xSco32TDR3Cle"/>
+</div>
+<span class="text-on-surface font-medium">Robert White</span>
+</td>
+<td class="p-gutter text-on-surface-variant font-data-lg text-sm">₹ 5,000</td>
+<td class="p-gutter text-on-surface-variant font-data-lg text-sm">₹ 0</td>
+<td class="p-gutter">
+<span class="px-2 py-1 bg-error-container/30 text-error border border-error-container/50 text-[10px] uppercase font-bold rounded-full">Pending</span>
+</td>
+<td class="p-gutter">
+<div class="flex items-center justify-end gap-3">
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container" style="width: 0%;"></div>
+</div>
+<span class="text-xs text-on-surface-variant">0%</span>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-gutter bg-surface-container-low/30 border-t border-outline-variant/5 text-center relative z-10">
+<button class="text-on-surface-variant text-sm hover:text-primary transition-all font-medium">View All Members</button>
+</div>
+</div>
+</div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Subtle Mouse Reactive Borders for Glass Cards
+        const glassCards = document.querySelectorAll('.glass-card');
+        
+        glassCards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Enhance the border color/glow intensity at the cursor point
+                const shimmer = card.querySelector('.aurora-glow');
+                if (shimmer) {
+                    shimmer.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(255, 215, 0, 0.08) 0%, transparent 60%)`;
+                }
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const shimmer = card.querySelector('.aurora-glow');
+                if (shimmer) {
+                    shimmer.style.background = `radial-gradient(circle at center, rgba(255, 215, 0, 0.03) 0%, transparent 70%)`;
+                }
+            });
+        });
+    });
+</script>
+</body></html>

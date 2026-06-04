@@ -1,12 +1,12 @@
 import { cn } from '../../utils/cn'
 
 const variants = {
-  primary: 'bg-blue-500 text-white hover:bg-blue-600',
-  secondary: 'bg-slate-100 text-slate-900 hover:bg-slate-200',
-  outline: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50',
-  ghost: 'text-slate-600 hover:bg-slate-100',
-  danger: 'bg-red-500 text-white hover:bg-red-600',
-  success: 'bg-green-500 text-white hover:bg-green-600',
+  primary: 'pulse-btn bg-primary-container text-on-primary-container shadow-lg shadow-primary-container/20 hover:brightness-110 font-label-caps uppercase',
+  secondary: 'bg-white/5 border border-outline-variant/20 text-on-surface hover:bg-white/10',
+  outline: 'border border-outline-variant/20 text-on-surface-variant hover:text-on-surface hover:bg-white/5',
+  ghost: 'text-on-surface-variant hover:text-on-surface hover:bg-white/5',
+  danger: 'bg-error-container text-on-error-container hover:brightness-110',
+  success: 'bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30',
 }
 
 const sizes = {

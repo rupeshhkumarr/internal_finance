@@ -1,29 +1,23 @@
 import { cn } from '../../utils/cn'
 import { formatAmount } from '../../utils/calculations'
 
-export function StatCard({ label, value, symbol, icon: Icon, variant = 'default', subtext }) {
-  const colors = {
-    default: 'text-slate-900',
-    success: 'text-green-600',
-    danger: 'text-red-600',
-    warning: 'text-amber-600',
-    primary: 'text-blue-600',
-  }
-
+export function StatCard({ label, value, symbol, icon: Icon, variant = 'default', subtext, delay = '0.2s' }) {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-start justify-between">
-        <p className="text-sm font-medium text-slate-500">{label}</p>
+    <div className="glass-card shimmer-effect p-6 rounded-xl flex flex-col justify-between min-h-[140px] group animate-fade-in-up" style={{ animationDelay: delay }}>
+      <div className="aurora-glow"></div>
+      <div className="flex justify-between items-start relative z-10 mb-4">
+        <span className="text-label-caps font-label-caps text-on-surface-variant/70">{label}</span>
         {Icon && (
-          <div className="rounded-lg bg-slate-50 p-2">
-            <Icon className="h-4 w-4 text-slate-500" />
-          </div>
+          <Icon className="h-5 w-5 text-primary-container/60 group-hover:text-primary-container transition-all group-hover:scale-110" />
         )}
       </div>
-      <p className={cn('mt-2 text-2xl font-semibold font-amount', colors[variant])}>
-        {typeof value === 'number' ? formatAmount(value, symbol) : value}
-      </p>
-      {subtext && <p className="mt-1 text-xs text-slate-500">{subtext}</p>}
+      <div className="flex items-center gap-1 relative z-10 mt-auto">
+        <span className="text-primary-container font-headline-sm text-2xl">{symbol}</span>
+        <span className="text-on-surface font-headline-md glow-text font-amount">
+          {typeof value === 'number' ? formatAmount(value, '').replace(symbol, '').trim() : value}
+        </span>
+      </div>
+      {subtext && <p className="mt-2 text-xs text-on-surface-variant/50 relative z-10">{subtext}</p>}
     </div>
   )
 }

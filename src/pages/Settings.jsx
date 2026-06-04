@@ -52,15 +52,15 @@ export default function Settings() {
   }
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <div>
-        <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-sm text-slate-500">Organization preferences and data management</p>
+    <div className="space-y-section-margin max-w-2xl">
+      <div className="animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+        <h1 className="text-headline-md font-headline-md text-on-surface">Settings</h1>
+        <p className="text-body-md text-on-surface-variant/70">Organization preferences and data management</p>
       </div>
 
-      <Card>
+      <Card style={{ animationDelay: '0.2s' }}>
         <CardHeader><CardTitle>General</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 p-gutter pt-0">
           <Input
             label="Organization / team name"
             value={form.orgName}
@@ -72,25 +72,27 @@ export default function Settings() {
             onChange={(e) => setForm({ ...form, currencySymbol: e.target.value })}
           />
           <Input
-            label="Default contribution target (INR)"
+            label="Default contribution target"
             type="number"
             value={form.defaultTargetAmount}
             onChange={(e) => setForm({ ...form, defaultTargetAmount: Number(e.target.value) })}
           />
           <Input
-            label="Opening balance (INR)"
+            label="Opening balance"
             type="number"
             value={form.openingBalance}
             onChange={(e) => setForm({ ...form, openingBalance: Number(e.target.value) })}
           />
-          <Button onClick={saveSettings}>Save settings</Button>
+          <div className="pt-2">
+            <Button onClick={saveSettings} variant="primary">Save settings</Button>
+          </div>
         </CardContent>
       </Card>
 
-      <Card>
+      <Card style={{ animationDelay: '0.3s' }}>
         <CardHeader><CardTitle>Backup & restore</CardTitle></CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-slate-600">
+        <CardContent className="space-y-4 p-gutter pt-0">
+          <p className="text-body-md text-on-surface-variant/70">
             Export all data as JSON for backup, or import a previous backup file.
           </p>
           <div className="flex flex-wrap gap-2">
@@ -106,10 +108,10 @@ export default function Settings() {
       </Card>
 
       {(!isCloud || isAdmin) && (
-        <Card className="border-red-200">
-          <CardHeader><CardTitle className="text-red-700">Danger zone</CardTitle></CardHeader>
-          <CardContent>
-            <p className="text-sm text-slate-600 mb-4">
+        <Card className="border border-error-container/20" style={{ animationDelay: '0.4s' }}>
+          <CardHeader><CardTitle className="text-error">Danger zone</CardTitle></CardHeader>
+          <CardContent className="p-gutter pt-0">
+            <p className="text-body-md text-on-surface-variant/70 mb-4">
               Reset all data to empty. This affects everyone when using shared cloud data.
               {isCloud && ' Admin only.'}
             </p>

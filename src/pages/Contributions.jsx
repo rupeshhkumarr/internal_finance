@@ -5,7 +5,7 @@ import { useToast } from '../context/ToastContext'
 import { Button } from '../components/ui/Button'
 import { Modal, ConfirmDialog } from '../components/ui/Modal'
 import { Badge } from '../components/ui/Badge'
-import { Card } from '../components/ui/Card'
+import { Card, CardContent } from '../components/ui/Card'
 import { EmptyState } from '../components/ui/EmptyState'
 import { Input, Select } from '../components/ui/Input'
 import { ContributionForm } from '../components/forms/ContributionForm'
@@ -58,11 +58,11 @@ export default function Contributions() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
+    <div className="space-y-section-margin">
+      <div className="flex flex-wrap items-center justify-between gap-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
         <div>
-          <h1 className="text-2xl font-bold">Contributions</h1>
-          <p className="text-sm text-slate-500">Money collected into the pool</p>
+          <h1 className="text-headline-md font-headline-md text-on-surface">Contributions</h1>
+          <p className="text-body-md text-on-surface-variant/70">Money collected into the pool</p>
         </div>
         <div className="flex gap-2">
           {selected.length > 0 && (
@@ -79,95 +79,97 @@ export default function Contributions() {
               </Button>
             </>
           )}
-          <Button onClick={() => setModal({ type: 'add' })}>
+          <Button onClick={() => setModal({ type: 'add' })} variant="primary">
             <Plus className="h-4 w-4" /> Add contribution
           </Button>
         </div>
       </div>
 
-      <Card className="p-4">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          <Select
-            placeholder="All members"
-            value={filters.member}
-            onChange={(e) => setFilters({ ...filters, member: e.target.value })}
-            options={state.members.map((m) => ({ value: m.id, label: m.name }))}
-          />
-          <Select
-            placeholder="All statuses"
-            value={filters.status}
-            onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-            options={[
-              { value: 'confirmed', label: 'Confirmed' },
-              { value: 'pending', label: 'Pending' },
-            ]}
-          />
-          <Select
-            placeholder="All methods"
-            value={filters.method}
-            onChange={(e) => setFilters({ ...filters, method: e.target.value })}
-            options={['cash', 'upi', 'bank_transfer', 'other'].map((m) => ({
-              value: m,
-              label: m.replace('_', ' '),
-            }))}
-          />
-          <Input
-            placeholder="Search ref / notes..."
-            value={filters.search}
-            onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-          />
-          <Select
-            value={filters.sort}
-            onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
-            options={[
-              { value: 'date-desc', label: 'Date (newest)' },
-              { value: 'date-asc', label: 'Date (oldest)' },
-              { value: 'amount-desc', label: 'Amount (high)' },
-              { value: 'member-asc', label: 'Member A–Z' },
-            ]}
-          />
-        </div>
+      <Card style={{ animationDelay: '0.2s' }}>
+        <CardContent>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            <Select
+              placeholder="All members"
+              value={filters.member}
+              onChange={(e) => setFilters({ ...filters, member: e.target.value })}
+              options={state.members.map((m) => ({ value: m.id, label: m.name }))}
+            />
+            <Select
+              placeholder="All statuses"
+              value={filters.status}
+              onChange={(e) => setFilters({ ...filters, status: e.target.value })}
+              options={[
+                { value: 'confirmed', label: 'Confirmed' },
+                { value: 'pending', label: 'Pending' },
+              ]}
+            />
+            <Select
+              placeholder="All methods"
+              value={filters.method}
+              onChange={(e) => setFilters({ ...filters, method: e.target.value })}
+              options={['cash', 'upi', 'bank_transfer', 'other'].map((m) => ({
+                value: m,
+                label: m.replace('_', ' '),
+              }))}
+            />
+            <Input
+              placeholder="Search ref / notes..."
+              value={filters.search}
+              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+            />
+            <Select
+              value={filters.sort}
+              onChange={(e) => setFilters({ ...filters, sort: e.target.value })}
+              options={[
+                { value: 'date-desc', label: 'Date (newest)' },
+                { value: 'date-asc', label: 'Date (oldest)' },
+                { value: 'amount-desc', label: 'Amount (high)' },
+                { value: 'member-asc', label: 'Member A–Z' },
+              ]}
+            />
+          </div>
+        </CardContent>
       </Card>
 
       {filtered.length === 0 ? (
         <EmptyState title="No contributions" description="Record money received into the pool." actionLabel="Add contribution" onAction={() => setModal({ type: 'add' })} />
       ) : (
-        <Card>
+        <Card style={{ animationDelay: '0.3s' }}>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b bg-slate-50 text-left text-slate-600">
-                  <th className="px-4 py-3 w-10" />
-                  <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">Member</th>
-                  <th className="px-4 py-3 text-right">Amount</th>
-                  <th className="px-4 py-3">Method</th>
-                  <th className="px-4 py-3">Reference</th>
-                  <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+            <table className="w-full text-left">
+              <thead className="bg-surface-container-low">
+                <tr className="border-b border-outline-variant/10 text-on-surface-variant/70 text-xs font-label-caps uppercase">
+                  <th className="p-gutter w-10" />
+                  <th className="p-gutter font-medium">Date</th>
+                  <th className="p-gutter font-medium">Member</th>
+                  <th className="p-gutter font-medium text-right">Amount</th>
+                  <th className="p-gutter font-medium">Method</th>
+                  <th className="p-gutter font-medium">Reference</th>
+                  <th className="p-gutter font-medium">Status</th>
+                  <th className="p-gutter font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-outline-variant/5">
                 {filtered.map((c) => (
-                  <tr key={c.id} className="border-b hover:bg-slate-50">
-                    <td className="px-4 py-3">
-                      <input type="checkbox" checked={selected.includes(c.id)} onChange={() => toggleSelect(c.id)} />
+                  <tr key={c.id} className="hover:bg-white/[0.02] transition-colors group">
+                    <td className="p-gutter">
+                      <input type="checkbox" checked={selected.includes(c.id)} onChange={() => toggleSelect(c.id)} className="rounded border-outline-variant/20 bg-surface-container text-primary-container focus:ring-primary-container/30" />
                     </td>
-                    <td className="px-4 py-3">{formatDate(c.date)}</td>
-                    <td className="px-4 py-3 font-medium">{memberMap[c.memberId]}</td>
-                    <td className="px-4 py-3 text-right font-amount text-green-600">{formatAmount(c.amount, symbol)}</td>
-                    <td className="px-4 py-3 capitalize">{c.method?.replace('_', ' ')}</td>
-                    <td className="px-4 py-3 text-slate-500">{c.referenceNo || '—'}</td>
-                    <td className="px-4 py-3">
+                    <td className="p-gutter text-on-surface-variant">{formatDate(c.date)}</td>
+                    <td className="p-gutter font-medium text-on-surface">{memberMap[c.memberId]}</td>
+                    <td className="p-gutter text-right font-amount text-primary-container">{formatAmount(c.amount, symbol)}</td>
+                    <td className="p-gutter capitalize text-on-surface-variant">{c.method?.replace('_', ' ')}</td>
+                    <td className="p-gutter text-on-surface-variant/70">{c.referenceNo || '—'}</td>
+                    <td className="p-gutter">
                       <Badge variant={c.status === 'confirmed' ? 'success' : 'warning'}>{c.status}</Badge>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="p-gutter">
                       <div className="flex justify-end gap-1">
-                        <button type="button" className="p-1.5 hover:bg-slate-100 rounded" onClick={() => setModal({ type: 'edit', ...c })}>
+                        <button type="button" className="p-1.5 rounded hover:bg-white/10 text-on-surface-variant hover:text-primary transition-colors" onClick={() => setModal({ type: 'edit', ...c })}>
                           <Pencil className="h-4 w-4" />
                         </button>
-                        <button type="button" className="p-1.5 hover:bg-red-50 rounded" onClick={() => setDeleteId(c.id)}>
-                          <Trash2 className="h-4 w-4 text-red-500" />
+                        <button type="button" className="p-1.5 rounded hover:bg-error-container/20 text-on-surface-variant hover:text-error transition-colors" onClick={() => setDeleteId(c.id)}>
+                          <Trash2 className="h-4 w-4" />
                         </button>
                       </div>
                     </td>

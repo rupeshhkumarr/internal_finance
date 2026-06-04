@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react'
-import { Search, Bell } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { usePool } from '../../context/PoolContext'
 import { globalSearch } from '../../utils/calculations'
@@ -32,23 +31,23 @@ export function Header() {
   const overdue = stats.overdueReceivables.length
 
   return (
-    <header className="no-print sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+    <header className="no-print sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-outline-variant/5">
       {overdue > 0 && (
-        <div className="bg-amber-50 border-b border-amber-200 px-6 py-2 text-sm text-amber-800">
-          <Bell className="inline h-4 w-4 mr-2 -mt-0.5" />
+        <div className="bg-error-container border-b border-error/20 px-gutter py-2 text-sm text-on-error-container">
+          <span className="material-symbols-outlined inline text-sm mr-2 align-text-bottom">notifications</span>
           {overdue} receivable{overdue > 1 ? 's are' : ' is'} overdue —{' '}
           <button
             type="button"
-            className="font-medium underline"
+            className="font-bold underline text-primary"
             onClick={() => navigate('/receivables')}
           >
             Review now
           </button>
         </div>
       )}
-      <div className="flex h-14 items-center gap-4 px-6">
+      <div className="flex h-16 items-center justify-between px-gutter">
         <div ref={ref} className="relative flex-1 max-w-xl">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/50 text-xl pointer-events-none">search</span>
           <input
             type="search"
             placeholder="Search members, transactions, notes..."
@@ -58,12 +57,12 @@ export function Header() {
               setOpen(true)
             }}
             onFocus={() => setOpen(true)}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+            className="w-full bg-surface-container-low border border-outline-variant/20 rounded-xl py-2 pl-10 pr-4 text-sm text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container/30 transition-all placeholder:text-on-surface-variant/50"
           />
           {open && query.trim() && (
-            <div className="absolute top-full mt-1 w-full rounded-lg border border-slate-200 bg-white shadow-lg max-h-80 overflow-y-auto">
+            <div className="absolute top-full mt-2 w-full rounded-xl border border-outline-variant/20 bg-surface-container-high shadow-lg shadow-black/50 max-h-80 overflow-y-auto z-50">
               {!hasResults ? (
-                <p className="p-4 text-sm text-slate-500">No results found</p>
+                <p className="p-4 text-sm text-on-surface-variant/70">No results found</p>
               ) : (
                 <SearchResults results={results} members={state.members} onNavigate={(path) => {
                   navigate(path)
@@ -90,7 +89,7 @@ function SearchResults({ results, members, onNavigate }) {
             <button
               key={m.id}
               type="button"
-              className="block w-full px-4 py-2 text-left hover:bg-slate-50"
+              className="block w-full px-4 py-2 text-left text-on-surface hover:bg-white/5 transition-colors"
               onClick={() => onNavigate(`/members?member=${m.id}`)}
             >
               {m.name}
@@ -104,7 +103,7 @@ function SearchResults({ results, members, onNavigate }) {
             <button
               key={c.id}
               type="button"
-              className="block w-full px-4 py-2 text-left hover:bg-slate-50"
+              className="block w-full px-4 py-2 text-left text-on-surface hover:bg-white/5 transition-colors"
               onClick={() => onNavigate('/contributions')}
             >
               {memberMap[c.memberId]} — ₹{c.amount}
@@ -118,7 +117,7 @@ function SearchResults({ results, members, onNavigate }) {
             <button
               key={r.id}
               type="button"
-              className="block w-full px-4 py-2 text-left hover:bg-slate-50"
+              className="block w-full px-4 py-2 text-left text-on-surface hover:bg-white/5 transition-colors"
               onClick={() => onNavigate('/receivables')}
             >
               {r.description}
@@ -132,7 +131,7 @@ function SearchResults({ results, members, onNavigate }) {
             <button
               key={p.id}
               type="button"
-              className="block w-full px-4 py-2 text-left hover:bg-slate-50"
+              className="block w-full px-4 py-2 text-left text-on-surface hover:bg-white/5 transition-colors"
               onClick={() => onNavigate('/payables')}
             >
               {p.description}
@@ -147,7 +146,7 @@ function SearchResults({ results, members, onNavigate }) {
 function Section({ title, children }) {
   return (
     <div>
-      <p className="px-4 py-1 text-xs font-semibold uppercase text-slate-400">{title}</p>
+      <p className="px-4 py-2 text-xs font-label-caps uppercase text-on-surface-variant/70">{title}</p>
       {children}
     </div>
   )
